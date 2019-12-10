@@ -28,75 +28,55 @@ public class FracCalc {
 			String leftOperator = null;
 			String rightOperator = null;
 
-			/*String token = getToken(input);
-			input = removeToken(input);
-			parseFraction(token);
-			leftNum = outNum;
-			leftDenom = outDenom;
-			token = getToken(input);
-			input = removeToken(input);
-			parseFraction(token);
-			middleNum = outNum;
-			middleDenom = outDenom;
-			boolean moreOperations = false;
-			boolean calcOK = false;*/
-			
+			/*
+			 * String token = getToken(input); input = removeToken(input);
+			 * parseFraction(token); leftNum = outNum; leftDenom = outDenom; token =
+			 * getToken(input); input = removeToken(input); parseFraction(token); middleNum
+			 * = outNum; middleDenom = outDenom; boolean moreOperations = false; boolean
+			 * calcOK = false;
+			 */
+
 			String token = getToken(input);
 			input = removeToken(input);
 			parseFraction(token);
 			leftNum = outNum;
 			leftDenom = outDenom;
-			
+
 			String operator = getToken(input);
 			input = removeToken(input);
-			token = input; 
+			token = input;
 			parseFraction(token);
 			middleNum = outNum;
 			middleDenom = outDenom;
 			boolean moreOperations = false;
-			boolean calcOK =calculate(leftNum, leftDenom, middleNum, middleDenom, operator);
-			
-/*			while (moreOperations) {
-				if (input.length() <= 1) {
-					moreOperations = false;
-					calcOK = calculate(leftNum, leftDenom, middleNum, middleDenom, leftOperator);
-				} else {
-					token = getToken(input);
-					input = removeToken(input);
+			boolean calcOK = calculate(leftNum, leftDenom, middleNum, middleDenom, operator);
 
-					rightOperator = token;
-					token = getToken(input);
-					input = removeToken(input);
-					parseFraction(token);
-					rightNum = outNum;
-					rightDenom = outDenom;
-
-				}
-				if ((leftOperator.equals("+") || (leftOperator.equals("-")))
-						&& (rightOperator.equals("*") || rightOperator.equals("/"))) {
-					calcOK = calculate(middleNum, middleDenom, rightNum, rightDenom, rightOperator);
-					middleNum = outNum;
-					middleDenom = outDenom;
-				} else {
-					calcOK = calculate(leftNum, leftDenom, middleNum, middleDenom, leftOperator);
-					leftNum = outNum;
-					leftDenom = outDenom;
-					leftOperator = rightOperator;
-					middleNum = rightNum;
-					middleDenom = rightDenom;
-				}
-			} */
+			/*
+			 * while (moreOperations) { if (input.length() <= 1) { moreOperations = false;
+			 * calcOK = calculate(leftNum, leftDenom, middleNum, middleDenom, leftOperator);
+			 * } else { token = getToken(input); input = removeToken(input);
+			 * 
+			 * rightOperator = token; token = getToken(input); input = removeToken(input);
+			 * parseFraction(token); rightNum = outNum; rightDenom = outDenom;
+			 * 
+			 * } if ((leftOperator.equals("+") || (leftOperator.equals("-"))) &&
+			 * (rightOperator.equals("*") || rightOperator.equals("/"))) { calcOK =
+			 * calculate(middleNum, middleDenom, rightNum, rightDenom, rightOperator);
+			 * middleNum = outNum; middleDenom = outDenom; } else { calcOK =
+			 * calculate(leftNum, leftDenom, middleNum, middleDenom, leftOperator); leftNum
+			 * = outNum; leftDenom = outDenom; leftOperator = rightOperator; middleNum =
+			 * rightNum; middleDenom = rightDenom; } }
+			 */
 
 			if (calcOK) {
 				return printFraction(outNum, outDenom);
 
 			} else {
 				return "error detected";
-			} 
-			
+			}
+
 		}
-	
-		
+
 	}
 
 	public static String removeToken(String input) {

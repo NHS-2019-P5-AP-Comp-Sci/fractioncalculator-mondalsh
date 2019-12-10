@@ -215,60 +215,8 @@ public class FracCalc {
 //	}
 //	
 //	
-////	public static void add (int num1, int denom1, int num2, int denom2) {
-////		int comd = denom1 * denom2;
-////		int newNomAnswer = (num1 *denom2) + (num2 *denom2);
-////		System.out.println(num1 + "/" + denom1 + "+" + num2 + "/" + denom2 + "=" + newNomAnswer + "/" + comd);
-////	}
-////
-	/*
-	 * public static String whole(String str) { if (str.contains("_")) { return
-	 * str.substring(0, str.indexOf('_'));
-	 * 
-	 * } else if (str.contains("/")) { return "0"; } else { return str; } }
-	 */
 
-////
-////	public static String findNum(String str) {
-////		if (str.contains("_")) {
-////			return str.substring(str.indexOf('_') + 1, str.indexOf('/'));
-////
-////		} else if (str.contains("/")) {
-////			return str.substring(0, str.indexOf('/'));
-////		} else {
-////			return "0";
-////		}
-////	}
-////
-////	public static String findDenom(String str) {
-////		if (str.contains("/")) {
-////			return str.substring(str.indexOf("/") + 1);
-////
-////		} else {
-////			return "1";
-////		}
-////	}
-////
-////	public static void reduce() {
-////		int denominator;
-////		int numerator;
-////		int gcd = getGcd(numerator, denominator);
-////		if (gcd == 1) {
-////			return;
-////		} else {
-////			numerator /= gcd;
-////			denominator /= gcd;
-////		}
-////	
-////	public static int getGcd(int a, int b) {
-////		if (b == 0) {
-////			return a;
-////		}else {
-////			return getGcd(a, a%b);
-////		}
-////
-////	}
-//
+	
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		String userResponce = s.nextLine();

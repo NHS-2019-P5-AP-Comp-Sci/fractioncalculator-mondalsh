@@ -7,187 +7,296 @@ package fracCalc;
 import java.util.*;
 
 public class FracCalc {
+	public static String produceAnswer(String input) {
+		/*
+		 * String wow = input; String operand1 = wow.substring(0, wow.indexOf(' ')); wow
+		 * = wow.substring(wow.indexOf(' ') + 1); String operator = wow.substring(0,
+		 * wow.indexOf(' ')); wow = wow.substring(wow.indexOf(' ') + 1); String operand2
+		 * = wow.substring(0);
+		 */
+		int space = input.indexOf(' ');
+		if (space < 0) {
+			return ("not statement");
+		} else {
 
-	public static int produceAnswer(String input) {
-		// Scanner s = new Scanner(input);
-		// String firstOperand = s.next();
+			int leftNum;
+			int leftDenom;
+			int middleNum;
+			int middleDenom;
+			int rightNum = 0;
+			int rightDenom = 0;
+			String leftOperator = null;
+			String rightOperator = null;
 
-		// String operator = s.next();
-		// String secondOperand = s.next();
+			/*String token = getToken(input);
+			input = removeToken(input);
+			parseFraction(token);
+			leftNum = outNum;
+			leftDenom = outDenom;
+			token = getToken(input);
+			input = removeToken(input);
+			parseFraction(token);
+			middleNum = outNum;
+			middleDenom = outDenom;
+			boolean moreOperations = false;
+			boolean calcOK = false;*/
+			
+			String token = getToken(input);
+			input = removeToken(input);
+			parseFraction(token);
+			leftNum = outNum;
+			leftDenom = outDenom;
+			
+			String operator = getToken(input);
+			input = removeToken(input);
+			token = input; 
+			parseFraction(token);
+			middleNum = outNum;
+			middleDenom = outDenom;
+			boolean moreOperations = false;
+			boolean calcOK =calculate(leftNum, leftDenom, middleNum, middleDenom, operator);
+			
+/*			while (moreOperations) {
+				if (input.length() <= 1) {
+					moreOperations = false;
+					calcOK = calculate(leftNum, leftDenom, middleNum, middleDenom, leftOperator);
+				} else {
+					token = getToken(input);
+					input = removeToken(input);
 
-		// return secondOperand;
-		String wow = input;
-		String operand1 = wow.substring(0, wow.indexOf(' '));
-		// wow = wow.substring(wow.indexOf(' ') + 1);
-		String operator = wow.substring(wow.indexOf(' ') + 1, wow.indexOf(" ") + 2);
-		// wow = wow.substring(wow.indexOf(' ') + 1);
-		String operand2 = wow.substring(wow.indexOf(" ") + 3);
-		String whole1 = operand1;
-		String numerator1 = "0";
-		String denominator1 = "1";
-		if (whole1.indexOf("/") != -1) {
-			if (operand1.indexOf("_") != -1) {
-				whole1 = operand1.substring(0, operand1.indexOf("_"));
+					rightOperator = token;
+					token = getToken(input);
+					input = removeToken(input);
+					parseFraction(token);
+					rightNum = outNum;
+					rightDenom = outDenom;
+
+				}
+				if ((leftOperator.equals("+") || (leftOperator.equals("-")))
+						&& (rightOperator.equals("*") || rightOperator.equals("/"))) {
+					calcOK = calculate(middleNum, middleDenom, rightNum, rightDenom, rightOperator);
+					middleNum = outNum;
+					middleDenom = outDenom;
+				} else {
+					calcOK = calculate(leftNum, leftDenom, middleNum, middleDenom, leftOperator);
+					leftNum = outNum;
+					leftDenom = outDenom;
+					leftOperator = rightOperator;
+					middleNum = rightNum;
+					middleDenom = rightDenom;
+				}
+			} */
+
+			if (calcOK) {
+				return printFraction(outNum, outDenom);
+
 			} else {
-				whole1 = "0";
-			}
-			numerator1 = operand1.substring(operand1.indexOf("_") + 1, operand1.indexOf("/"));
-			denominator1 = operand1.substring(operand1.indexOf("/") + 1, operand1.length());
+				return "error detected";
+			} 
+			
 		}
-		// String whole2 = operand2;
-		String numerator2 = "0";
-		String denominator2 = "1";
-		if (operand2.indexOf("/") != -1) {
-			if (operand2.indexOf("_") != -1) {
-				// whole2 = operand2.substring(0, operand2.indexOf("_"));
-			} else {
-				// whole2 = "0";
-			}
-			numerator2 = operand2.substring(operand2.indexOf("_") + 1, operand2.indexOf("/"));
-			denominator2 = operand2.substring(operand2.indexOf("/") + 1, operand2.length());
+	
+		
+	}
+
+	public static String removeToken(String input) {
+		input = input.trim();
+		int space = input.indexOf(' ');
+		if (space == -1) {
+			return "";
+		}
+		return input.substring(space + 1);
+
+	}
+
+	public static String getToken(String input) {
+		int space = input.indexOf(' ');
+		if (space == -1) {
+			return input;
+		}
+		return input.substring(0, space);
+
+	}
+
+	static int outNum;
+	static int outDenom;
+
+	public static void parseFraction(String input) {
+		int under = input.indexOf('_');
+		int slash = input.indexOf('/');
+		if (under > 0) {
+			int whole = Integer.parseInt(input.substring(0, under));
+			outNum = Integer.parseInt(input.substring(slash + 1));
 
 		}
-		if (operator == "+") {
-			add(numerator1, operator, denominator1, numerator2, denominator2);
-		}
-		if (operator.equals("-")) {
-			sub(numerator1, operator, denominator1, numerator2, denominator2);
-		}
-		if (operator.equals("x")) {
-			multi(numerator1, operator, denominator1, numerator2, denominator2);
-		}
-		if (operator.contentEquals("/")) {
-			div(numerator1, operator, denominator1, numerator2, denominator2);
+		int whole = 0;
+		if (whole < 0) {
+			outNum = 0 - outNum;
+			outDenom = Integer.parseInt(input.substring(slash + 1));
+			outNum = outNum + whole + outDenom;
+		} else if (slash > 0) {
+			outNum = Integer.parseInt(input.substring(slash + 1));
+			outDenom = Integer.parseInt(input.substring(slash + 1));
+
+		} else {
+			outNum = Integer.parseInt(input);
+			outDenom = 1;
 		}
 
-		int result = Integer.valueOf(numerator2);
+	}
+
+	public static String printFraction(int num, int denom) {
+		String result = "";
+		if (denom < 0) {
+			denom = 0 - denom;
+			num = 0 - num;
+		}
+		if (num < 0) {
+			result += "-";
+			num = 0 - num;
+		}
+		int gcd = findGcd(num, denom);
+		num = num / gcd;
+		denom = denom / gcd;
+		int whole = num / denom;
+		num = num % denom;
+		if (num == 0) {
+			result += whole;
+		} else {
+			if (whole > 0) {
+				result += (whole + "_");
+			}
+			result += (num + "/" + denom);
+		}
 		return result;
-	}
-//		//String op2whole = findWhole(operand2);
-	// String op2num = findNum(operand2);
-//		//String op2denom = findDenom(operand2);
-
-	// String chk2Answer = op2whole + op2num + op2denom;
-
-	// return chk2Answer;
-	// num2 = wow.substring(wow.indexOf("_")+1, wow.indexOf("/"));
-
-	public static String findWhole(String str) {
-		if (str.contains("_")) {
-			return str.substring(0, str.indexOf('_'));
-		} else if (str.contains("/")) {
-			return "0";
-
-		} else
-			return str;
 
 	}
 
-	public static String findNum(String str) {
-		if (str.contains("_")) {
-			return str.substring(str.indexOf('_') + 1, str.indexOf('/'));
-		} else if (str.contains("/")) {
-			return str.substring(0, str.indexOf('/'));
-		} else {
-			return "0";
+	public static int findGcd(int a, int b) {
+		while (true) {
+			if (a < b) {
+				int t = a;
+				a = b;
+				b = t;
+
+			}
+			if (b == 0) {
+
+				a = a % b;
+				return a;
+			}
 		}
 	}
 
-	public static String findDenom(String str) {
-		if (str.contains("/")) {
-			return str.substring(str.indexOf("/") + 1);
+	public static boolean calculate(int num1, int denom1, int num2, int denom2, String Operator) {
+		if (Operator.equals("+")) {
+			outNum = (num1 * denom2) + (num2 * denom1);
+			outDenom = denom1 * denom2;
+		} else if (Operator.equals("-")) {
+			outNum = num1 * denom2 - num2 * denom1;
+			outDenom = denom1 * denom2;
+		} else if (Operator.equals("*")) {
+			outNum = num1 * num2;
+			outDenom = denom1 * denom2;
+		} else if (Operator.equals("/")) {
+			outNum = num1 * denom2;
+			outDenom = denom1 * num2;
 		} else {
-			return "1";
+			System.out.println("unrecognied operator" + Operator);
+			return false;
 		}
+		return true;
+
 	}
 
+//	public static String produceAnswer(String input) {
+//		String wow = input;
+//		String operand1 = wow.substring(0, wow.indexOf(' '));
+//		wow = wow.substring(wow.indexOf(' ') + 1);
+//		String operator = wow.substring(0, wow.indexOf(' '));
+//		wow = wow.substring(wow.indexOf(' ') + 1);
+//		String operand2 = wow.substring(0);
+//		
+//			
+//		}
+////		String op2whole = findWhole(operand2);
+////		String op2num = findNum(operand2);
+////		String op2denom = findDenom(operand2);
+//		// String chk2Answer = "whole:" + op2whole + " numerator:" + op2num + "
+//		// denominator:" + op2denom;
+//		
+//		//String chk2Answer = op2whole + " " + op2num + "/" + op2denom;
+//		//return chk2Answer;
+//	//}
+//	public static void add(String str) {
+//		if (str.contains("+")) {
+//			return (())
+//		}
+//	}
+//	
+//	
+////	public static void add (int num1, int denom1, int num2, int denom2) {
+////		int comd = denom1 * denom2;
+////		int newNomAnswer = (num1 *denom2) + (num2 *denom2);
+////		System.out.println(num1 + "/" + denom1 + "+" + num2 + "/" + denom2 + "=" + newNomAnswer + "/" + comd);
+////	}
+////
 	/*
-	 * public static void add(int a1, int b1, int a2, int b2) { String reduced =
-	 * reduce((a1 + a2), (b1 + b2)); System.out.println(reduced); }
+	 * public static String whole(String str) { if (str.contains("_")) { return
+	 * str.substring(0, str.indexOf('_'));
 	 * 
-	 * public static void substract(int a1, int b1, int a2, int b2) { String reduced
-	 * = reduce((a1 - a2), (b1 - b2)); System.out.println(reduced); }
-	 * 
-	 * public static void multiply(int a1, int b1, int a2, int b2) { String reduced
-	 * = reduce((a1 * a2), (b1 * b2)); System.out.println(reduced); }
-	 * 
-	 * public static void divide(int a1, int b1, int a2, int b2) { String reduced =
-	 * reduce((a1 * b2), (b1 * a2)); System.out.println(reduced); }
-	 * 
-	 * public static int rd(int top, int bot) { int temp; while (top != 0 && bot !=
-	 * 0) { temp = bot; bot = top % bot; top = temp; } return Math.abs(top + bot);
-	 * 
-	 * }
-	 * 
-	 * public static String reduce(int t, int b) { int rd = rd(t, b); t = t / rd; b
-	 * = b / rd; return t + "/" + b; }
+	 * } else if (str.contains("/")) { return "0"; } else { return str; } }
 	 */
-	public static void div(String num1, String op1, String dom1, String num2, String dom2) {
-		// int Num = Integer.parseInt(num1);
-		// int Dom = Integer.parseInt(dom1);
-		int Num2 = Integer.parseInt(num2);
-		int Dom2 = Integer.parseInt(dom2);
-		int tempInt;
-		tempInt = Num2;
-		Num2 = Dom2;
-		Dom2 = tempInt;
-		num1 = Integer.toString(Num2);
-		dom1 = Integer.toString(Dom2);
 
-		multi(num1, op1, dom1, num2, dom2);
-	}
-
-	public static String multi(String num1, String op1, String dom1, String num2, String dom2) {
-		int Num = Integer.parseInt(num1);
-		int Dom = Integer.parseInt(dom1);
-		int Num2 = Integer.parseInt(num2);
-		int Dom2 = Integer.parseInt(dom2);
-		int numAnswer = Num * Num2;
-		int domAnswer = Dom * Dom2;
-		String ans = Integer.toString(numAnswer) + Integer.toString(domAnswer);
-		return ans;
-	}
-
-	public static String sub(String num1, String op1, String dom1, String num2, String dom2) {
-		int Num = Integer.parseInt(num1);
-		int Dom = Integer.parseInt(dom1);
-		int Num2 = Integer.parseInt(num2);
-		int Dom2 = Integer.parseInt(dom2);
-		int commondenom = Dom * Dom2;
-		if (Dom != Dom2) {
-			Dom = commondenom;
-			Dom2 = commondenom;
-		}
-		int answer = Num - Num2;
-		String ans = Integer.toString(answer) + Integer.toString(commondenom);
-		return ans;
-	}
-
-	public static String add(String num1, String op1, String dom1, String num2, String dom2) {
-		int Num = Integer.parseInt(num1);
-		int Dom = Integer.parseInt(dom1);
-		int Num2 = Integer.parseInt(num2);
-		int Dom2 = Integer.parseInt(dom2);
-		int commondenom = Dom * Dom2;
-		if (Dom != Dom2) {
-			Dom = commondenom;
-			Dom2 = commondenom;
-		}
-		int answer = Num + Num2;
-		String ans = Integer.toString(answer) + Integer.toString(commondenom);
-		return ans;
-	}
-
+////
+////	public static String findNum(String str) {
+////		if (str.contains("_")) {
+////			return str.substring(str.indexOf('_') + 1, str.indexOf('/'));
+////
+////		} else if (str.contains("/")) {
+////			return str.substring(0, str.indexOf('/'));
+////		} else {
+////			return "0";
+////		}
+////	}
+////
+////	public static String findDenom(String str) {
+////		if (str.contains("/")) {
+////			return str.substring(str.indexOf("/") + 1);
+////
+////		} else {
+////			return "1";
+////		}
+////	}
+////
+////	public static void reduce() {
+////		int denominator;
+////		int numerator;
+////		int gcd = getGcd(numerator, denominator);
+////		if (gcd == 1) {
+////			return;
+////		} else {
+////			numerator /= gcd;
+////			denominator /= gcd;
+////		}
+////	
+////	public static int getGcd(int a, int b) {
+////		if (b == 0) {
+////			return a;
+////		}else {
+////			return getGcd(a, a%b);
+////		}
+////
+////	}
+//
 	public static void main(String[] args) {
 		Scanner s = new Scanner(System.in);
 		String userResponce = s.nextLine();
-		String userResponse = s.nextLine();
-		while (!userResponse.equalsIgnoreCase("quit")) {
+		// String userResponse = s.nextLine();
+		while (!userResponce.equalsIgnoreCase("quit")) {
 			System.out.println((produceAnswer(userResponce)));
-
 		}
 		s.close();
-
 	}
-
 }
+//}

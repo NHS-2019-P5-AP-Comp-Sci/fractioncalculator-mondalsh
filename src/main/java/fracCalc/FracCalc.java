@@ -7,224 +7,140 @@ package fracCalc;
 import java.util.*;
 
 public class FracCalc {
-	public static String produceAnswer(String input) {
-		/*
-		 * String wow = input; String operand1 = wow.substring(0, wow.indexOf(' ')); wow
-		 * = wow.substring(wow.indexOf(' ') + 1); String operator = wow.substring(0,
-		 * wow.indexOf(' ')); wow = wow.substring(wow.indexOf(' ') + 1); String operand2
-		 * = wow.substring(0);
-		 */
-		int space = input.indexOf(' ');
-		if (space < 0) {
-			return ("not statement");
-		} else {
-
-			int leftNum;
-			int leftDenom;
-			int middleNum;
-			int middleDenom;
-			int rightNum = 0;
-			int rightDenom = 0;
-			String leftOperator = null;
-			String rightOperator = null;
-
-			/*
-			 * String token = getToken(input); input = removeToken(input);
-			 * parseFraction(token); leftNum = outNum; leftDenom = outDenom; token =
-			 * getToken(input); input = removeToken(input); parseFraction(token); middleNum
-			 * = outNum; middleDenom = outDenom; boolean moreOperations = false; boolean
-			 * calcOK = false;
-			 */
-
-			String token = getToken(input);
-			input = removeToken(input);
-			parseFraction(token);
-			leftNum = outNum;
-			leftDenom = outDenom;
-
-			String operator = getToken(input);
-			input = removeToken(input);
-			token = input;
-			parseFraction(token);
-			middleNum = outNum;
-			middleDenom = outDenom;
-			boolean moreOperations = false;
-			boolean calcOK = calculate(leftNum, leftDenom, middleNum, middleDenom, operator);
-
-			/*
-			 * while (moreOperations) { if (input.length() <= 1) { moreOperations = false;
-			 * calcOK = calculate(leftNum, leftDenom, middleNum, middleDenom, leftOperator);
-			 * } else { token = getToken(input); input = removeToken(input);
-			 * 
-			 * rightOperator = token; token = getToken(input); input = removeToken(input);
-			 * parseFraction(token); rightNum = outNum; rightDenom = outDenom;
-			 * 
-			 * } if ((leftOperator.equals("+") || (leftOperator.equals("-"))) &&
-			 * (rightOperator.equals("*") || rightOperator.equals("/"))) { calcOK =
-			 * calculate(middleNum, middleDenom, rightNum, rightDenom, rightOperator);
-			 * middleNum = outNum; middleDenom = outDenom; } else { calcOK =
-			 * calculate(leftNum, leftDenom, middleNum, middleDenom, leftOperator); leftNum
-			 * = outNum; leftDenom = outDenom; leftOperator = rightOperator; middleNum =
-			 * rightNum; middleDenom = rightDenom; } }
-			 */
-
-			if (calcOK) {
-				return printFraction(outNum, outDenom);
-
-			} else {
-				return "error detected";
-			}
-
-		}
-
-	}
-
-	public static String removeToken(String input) {
-		input = input.trim();
-		int space = input.indexOf(' ');
-		if (space == -1) {
-			return "";
-		}
-		return input.substring(space + 1);
-
-	}
-
-	public static String getToken(String input) {
-		int space = input.indexOf(' ');
-		if (space == -1) {
-			return input;
-		}
-		return input.substring(0, space);
-
-	}
-
-	static int outNum;
-	static int outDenom;
-
-	public static void parseFraction(String input) {
-		int under = input.indexOf('_');
-		int slash = input.indexOf('/');
-		if (under > 0) {
-			int whole = Integer.parseInt(input.substring(0, under));
-			outNum = Integer.parseInt(input.substring(slash + 1));
-
-		}
-		int whole = 0;
-		if (whole < 0) {
-			outNum = 0 - outNum;
-			outDenom = Integer.parseInt(input.substring(slash + 1));
-			outNum = outNum + whole + outDenom;
-		} else if (slash > 0) {
-			outNum = Integer.parseInt(input.substring(slash + 1));
-			outDenom = Integer.parseInt(input.substring(slash + 1));
-
-		} else {
-			outNum = Integer.parseInt(input);
-			outDenom = 1;
-		}
-
-	}
-
-	public static String printFraction(int num, int denom) {
-		String result = "";
-		if (denom < 0) {
-			denom = 0 - denom;
-			num = 0 - num;
-		}
-		if (num < 0) {
-			result += "-";
-			num = 0 - num;
-		}
-		int gcd = findGcd(num, denom);
-		num = num / gcd;
-		denom = denom / gcd;
-		int whole = num / denom;
-		num = num % denom;
-		if (num == 0) {
-			result += whole;
-		} else {
-			if (whole > 0) {
-				result += (whole + "_");
-			}
-			result += (num + "/" + denom);
-		}
-		return result;
-
-	}
-
-	public static int findGcd(int a, int b) {
-		while (true) {
-			if (a < b) {
-				int t = a;
-				a = b;
-				b = t;
-
-			}
-			if (b == 0) {
-
-				a = a % b;
-				return a;
-			}
-		}
-	}
-
-	public static boolean calculate(int num1, int denom1, int num2, int denom2, String Operator) {
-		if (Operator.equals("+")) {
-			outNum = (num1 * denom2) + (num2 * denom1);
-			outDenom = denom1 * denom2;
-		} else if (Operator.equals("-")) {
-			outNum = num1 * denom2 - num2 * denom1;
-			outDenom = denom1 * denom2;
-		} else if (Operator.equals("*")) {
-			outNum = num1 * num2;
-			outDenom = denom1 * denom2;
-		} else if (Operator.equals("/")) {
-			outNum = num1 * denom2;
-			outDenom = denom1 * num2;
-		} else {
-			System.out.println("unrecognied operator" + Operator);
-			return false;
-		}
-		return true;
-
-	}
-
-//	public static String produceAnswer(String input) {
-//		String wow = input;
-//		String operand1 = wow.substring(0, wow.indexOf(' '));
-//		wow = wow.substring(wow.indexOf(' ') + 1);
-//		String operator = wow.substring(0, wow.indexOf(' '));
-//		wow = wow.substring(wow.indexOf(' ') + 1);
-//		String operand2 = wow.substring(0);
-//		
-//			
-//		}
-////		String op2whole = findWhole(operand2);
-////		String op2num = findNum(operand2);
-////		String op2denom = findDenom(operand2);
-//		// String chk2Answer = "whole:" + op2whole + " numerator:" + op2num + "
-//		// denominator:" + op2denom;
-//		
-//		//String chk2Answer = op2whole + " " + op2num + "/" + op2denom;
-//		//return chk2Answer;
-//	//}
-//	public static void add(String str) {
-//		if (str.contains("+")) {
-//			return (())
-//		}
-//	}
-//	
-//	
-
-	
 	public static void main(String[] args) {
+//takes user input
 		Scanner s = new Scanner(System.in);
-		String userResponce = s.nextLine();
-		// String userResponse = s.nextLine();
-		while (!userResponce.equalsIgnoreCase("quit")) {
-			System.out.println((produceAnswer(userResponce)));
+		String input = "";
+		String answer = "";
+		
+		input = s.nextLine();
+		while (!input.equals("quit")) {
+			answer = produceAnswer(input);
+			System.out.println(answer);
+			
+			input = s.nextLine();
 		}
 		s.close();
 	}
+
+	public static String produceAnswer(String input) {
+//numbers and operators 
+		
+		int wow = input.indexOf(' ');
+		String operand1 = input.substring(0, wow);
+		input = input.substring(wow + 1);
+		char operator = input.charAt(0);
+		int operand2 = input.indexOf(' ');
+		input = input.substring(operand2 + 1);
+		String second = input.substring(0);
+//using symbols
+		boolean underscore = false;
+		boolean slash = false;
+		for (int index = 0; index < operand1.length(); index++) {
+			if (operand1.charAt(index) == '_') {
+				underscore = true;
+			} else if (operand1.charAt(index) == '/') {
+				slash = true;
+			}
+		}
+		//finding the first number
+		int ina = operand1.indexOf('_');
+		int inb = operand1.indexOf('/');
+		int whole1;
+		int num1;
+		int denom1;
+		//uses symbols
+		if (underscore && slash) {
+			whole1 = Integer.parseInt(operand1.substring(0, ina));
+			num1 = Integer.parseInt(operand1.substring(ina + 1, inb));
+			if (whole1 < 0) {
+				num1 *= -1;
+			}
+			denom1 = Integer.parseInt(operand1.substring(inb + 1));
+			num1 += whole1 * denom1;
+		} else if (!underscore && slash) {
+			num1 = Integer.parseInt(operand1.substring(0, inb));
+			denom1 = Integer.parseInt(operand1.substring(inb + 1));
+		} else {
+			denom1 = 1;
+			num1 = Integer.parseInt(operand1);
+		}
+
+		underscore = false;
+		slash = false;
+		for (int index = 0; index < second.length(); index++) {
+			if (second.charAt(index) == '_') {
+				underscore = true;
+			} else if (second.charAt(index) == '/') {
+				slash = true;
+			}
+		}
+		//finding second number
+		int whole2;
+		int num2;
+		int denom2;
+		ina = second.indexOf('_');
+		inb = second.indexOf('/');
+		//uses symbols
+		if (underscore && slash) {
+			whole2 = Integer.parseInt(second.substring(0, ina));
+			num2 = Integer.parseInt(second.substring(ina + 1, inb));
+			if (whole2 < 0) {
+				num2 *= -1;
+			}
+			denom2 = Integer.parseInt(second.substring(inb + 1));
+			num2 += whole2 * denom2;
+		} else if (!underscore && slash) {
+			num2 = Integer.parseInt(second.substring(0, inb));
+			denom2 = Integer.parseInt(second.substring(inb + 1));
+		} else {
+			num2 = Integer.parseInt(second);
+			denom2 = 1;
+		}
+
+	
+//uses the symbols to determine which operation to perform 
+		int annum;
+		int andenom = denom1 * denom2;
+		if (operator == '+') {
+			annum = num1 * denom2 + num2 * denom1;
+		} else if (operator == '-') {
+			annum = num1 * denom2 - num2 * denom1;
+		} else if (operator == '*') {
+			annum = num1 * num2;
+		} else {
+			annum = num1 * denom2;
+			andenom = denom1 * num2;
+		}
+//fraction
+		if (andenom == 1 || annum % andenom == 0) {
+			return "" + (annum / andenom);
+		}
+		int mul = 1;
+		if (annum < 0) {
+			mul *= -1;
+			annum *= -1;
+		}
+		if (andenom < 0) {
+			mul *= -1;
+			andenom *= -1;
+		}
+		//for reduction
+		for (int i = 2; i <= Math.min(annum, andenom); i++) {
+			while (annum % i == 0 && andenom % i == 0) {
+				annum /= i;
+				andenom /= i;
+			}
+		}
+		if (annum < andenom) {
+			return "" + (annum * mul) + '/' + andenom;
+		}
+		int whole = 0;
+		while (annum > andenom) {
+			annum -= andenom;
+			whole += 1;
+		}
+		return "" + (whole * mul) + '_' + annum + '/' + andenom;
+	}
+
 }
-//}
